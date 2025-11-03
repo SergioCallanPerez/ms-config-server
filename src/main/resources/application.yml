@@ -6,10 +6,8 @@ spring:
     config:
       server:
         git:
-          uri: https://github.com/SergioCallanPerez/config.git
+          uri: https://github.com/SergioCallanPerez/ms-config-server.git
           searchPaths: config-data
-          username: ${GIT_USER}
-          password: ${SIT_PASSWORD}
   security:
     user:
       name: root
