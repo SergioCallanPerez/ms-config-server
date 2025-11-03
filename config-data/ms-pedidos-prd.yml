@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: ms-pedidos
+
+  r2dbc:
+    url: ${DB_URL_PEDIDOS_PRD}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+
+  main:
+    web-application-type: reactive
+
+server:
+  port: 8082
+  error:
+    include-message: always
+
+logging:
+  level:
+    org.springframework.r2dbc: DEBUG

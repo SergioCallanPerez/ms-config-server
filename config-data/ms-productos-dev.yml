@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: ms-productos
+
+  r2dbc:
+    url: ${DB_URL_PRODUCTOS_DEV}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+
+  main:
+    web-application-type: reactive
+
+server:
+  port: 8081
+  error:
+    include-message: always
+
+logging:
+  level:
+    org.springframework.r2dbc: DEBUG
