@@ -6,7 +6,7 @@ spring:
     config:
       server:
         git:
-          uri: https://github.com/SergioCallanPerez/ms-config-server.git
+          uri: https://github.com/SergioCallanPerez/config-server.git
           searchPaths: config-data
   security:
     user:
