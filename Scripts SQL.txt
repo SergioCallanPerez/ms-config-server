@@ -1,0 +1,79 @@
+Creacion de productos:
+CREATE TABLE productos (
+    id BIGSERIAL PRIMARY KEY,
+    nombre VARCHAR(255) NOT NULL,
+    descripcion TEXT,
+    precio NUMERIC(10, 2) NOT NULL CHECK (precio >= 0),
+    stock INTEGER NOT NULL CHECK (stock >= 0),
+    activo BOOLEAN DEFAULT TRUE,
+    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+Creacion de pedidos:
+CREATE TABLE pedidos (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    cliente VARCHAR(255),
+    fecha TIMESTAMP,
+    total NUMERIC(10, 2),
+    estado VARCHAR(50)
+);
+
+
+Creacion de detalle_pedidos: 
+CREATE TABLE detalle_pedidos (
+    id BIGSERIAL PRIMARY KEY,
+    pedido_id BIGINT NOT NULL,
+    producto_id BIGINT NOT NULL,
+    cantidad INTEGER NOT NULL CHECK cantidad > 0),
+    precio_unitario NUMERIC(10, 2) NOT NULL,
+    FOREIGN KEY (pedido_id) REFERENCES pedidos(id)
+);
+
+
+Creacion de procedimiento actualizar_stock:
+CREATE OR REPLACE FUNCTION actualizar_stock(
+    p_producto_id BIGINT,
+    p_cantidad INTEGER
+) RETURNS VOID AS $$
+DECLARE
+    v_stock_actual INTEGER;
+BEGIN
+    SELECT stock INTO v_stock_actual FROM productos WHERE id = p_producto_id;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Producto con id % no encontrado', p_producto_id;
+    END IF;
+
+    IF v_stock_actual < p_cantidad THEN
+        RAISE EXCEPTION 'Stock insuficiente para el producto %', p_producto_id;
+    END IF;
+
+    UPDATE productos
+    SET stock = stock - p_cantidad
+    WHERE id = p_producto_id;
+END;
+$$ LANGUAGE plpgsql;
+
+
+Creacion de procedimiento productos_bajo_stock:
+CREATE OR REPLACE FUNCTION productos_bajo_stock(
+    p_minimo INTEGER
+) RETURNS TABLE(
+    id BIGINT,
+    nombre VARCHAR,
+    stock INTEGER
+) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT p.id, p.nombre, p.stock
+    FROM productos p
+    WHERE p.stock < p_minimo AND p.activo = true;
+END;
+$$ LANGUAGE plpgsql;
+
+Llenado de productos:
+INSERT INTO productos (nombre, descripcion, precio, stock, activo, fecha_creacion)
+VALUES 
+('Laptop Dell', 'Laptop i7 16GB RAM', 1200.00, 10, true, NOW()),
+('Mouse Logitech', 'Mouse inalámbrico', 25.00, 50, true, NOW()),
+('Teclado Mecánico', 'Teclado RGB', 80.00, 30, true, NOW());
