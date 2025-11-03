@@ -181,6 +181,28 @@ Response:
 ]
 }
 
+#### Ver productos con bajo stock: GET /{stock}
+Response:
+
+[
+{
+"id": 1,
+"nombre": "Laptop Dell",
+"stock": 8
+},
+{
+"id": 6,
+"nombre": "Laptop Dell",
+"stock": 0
+},
+{
+"id": 5,
+"nombre": "Laptop Dell",
+"stock": 0
+}
+]
+
+
 #### Creación de productos: POST / 
 
 Request:
