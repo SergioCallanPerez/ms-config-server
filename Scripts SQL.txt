@@ -24,7 +24,7 @@ CREATE TABLE detalle_pedidos (
     id BIGSERIAL PRIMARY KEY,
     pedido_id BIGINT NOT NULL,
     producto_id BIGINT NOT NULL,
-    cantidad INTEGER NOT NULL CHECK cantidad > 0),
+    cantidad INTEGER NOT NULL CHECK (cantidad > 0),
     precio_unitario NUMERIC(10, 2) NOT NULL,
     FOREIGN KEY (pedido_id) REFERENCES pedidos(id)
 );
@@ -41,11 +41,11 @@ BEGIN
     SELECT stock INTO v_stock_actual FROM productos WHERE id = p_producto_id;
 
     IF NOT FOUND THEN
-        RAISE EXCEPTION 'Producto con id % no encontrado', p_producto_id;
+        RAISE EXCEPTION 'ERROR[404]:Producto con id % no encontrado', p_producto_id;
     END IF;
 
     IF v_stock_actual < p_cantidad THEN
-        RAISE EXCEPTION 'Stock insuficiente para el producto %', p_producto_id;
+        RAISE EXCEPTION 'ERROR[400]:Stock insuficiente para el producto %', p_producto_id;
     END IF;
 
     UPDATE productos
