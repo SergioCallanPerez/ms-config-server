@@ -2,12 +2,43 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.3.4'
 	id 'io.spring.dependency-management' version '1.1.7'
+	id 'jacoco'
+    id 'org.sonarqube' version '4.4.1.3373'
 }
 
 
 group = 'com.example'
 version = '0.0.1-SNAPSHOT'
 description = 'Config Server para microservicios'
+
+jacoco {
+    toolVersion = "0.8.11"
+}
+
+sonarqube {
+    properties {
+        property "sonar.projectKey", "SergioCallanPerez_gateway-service"
+        property "sonar.organization", "SergioCallanPerez"
+        property "sonar.host.url", "https://sonarcloud.io"
+
+        // Ubicación del reporte JaCoCo
+        property "sonar.java.coveragePlugin", "jacoco"
+        property "sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/test/jacocoTestReport.xml"
+    }
+}
+
+test {
+    useJUnitPlatform()
+    finalizedBy jacocoTestReport
+}
+
+jacocoTestReport {
+    dependsOn test
+    reports {
+        xml.required = true
+        html.required = true
+    }
+}
 
 java {
 	toolchain {
@@ -31,8 +62,4 @@ dependencyManagement {
     imports {
         mavenBom "org.springframework.cloud:spring-cloud-dependencies:2023.0.3"
     }
-}
-
-tasks.named('test') {
-	useJUnitPlatform()
 }

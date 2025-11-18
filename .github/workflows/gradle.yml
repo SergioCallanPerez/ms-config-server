@@ -40,6 +40,14 @@ jobs:
     - name: Build with Gradle Wrapper
       run: ./gradlew build
 
+    - name: Build + Test + JaCoCo
+      run: ./gradlew build jacocoTestReport
+
+    - name: SonarCloud Scan
+      env:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      run: ./gradlew sonar
+
   dependency-submission:
 
     runs-on: ubuntu-latest
