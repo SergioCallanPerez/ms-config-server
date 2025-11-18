@@ -17,7 +17,7 @@ jacoco {
 
 sonarqube {
     properties {
-        property "sonar.projectKey", "SergioCallanPerez_gateway-service"
+        property "sonar.projectKey", "SergioCallanPerez_ms-config-server"
         property "sonar.organization", "SergioCallanPerez"
         property "sonar.host.url", "https://sonarcloud.io"
 
